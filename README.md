@@ -65,3 +65,11 @@ asks you to open a PR to squash a bug or implement a new feature.
     - Submit the file by addig, commiting and pushing your code
 5. If your branch and Python script are named correctly (steps 3 and 4), your branch
 will trigger a few Actions, which will in turn grade your code.
+
+## Participation Tracker
+
+|      Name | Score |
+|-----------|-------|
+|      Aldo |     1 |
+|   Eduardo |     1 |
+|     Savio |     1 |
