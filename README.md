@@ -66,13 +66,17 @@ asks you to open a PR to squash a bug or implement a new feature.
 5. If your branch and Python script are named correctly (steps 3 and 4), your branch
 will trigger a few Actions, which will in turn grade your code.
 
+## Resources
+[Mostly Harmless Econometrics](https://www.mostlyharmlesseconometrics.com/)
+[An Introduction to Statistical Learning](https://www.statlearning.com/)
+
 ## Participation Tracker
 
 |      Name | Score |
 |-----------|-------|
-|      Aldo |     1 |
-|   Eduardo |     3 |
+|      Aldo |     2 |
+|   Eduardo |     4 |
 |     Savio |     2 |
 |   Elideth |     1 |
-|    Alexis |     2 |
+|    Alexis |     3 |
 |    Astrid |     2 |
