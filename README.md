@@ -67,8 +67,8 @@ asks you to open a PR to squash a bug or implement a new feature.
 will trigger a few Actions, which will in turn grade your code.
 
 ## Resources
-[Mostly Harmless Econometrics](https://www.mostlyharmlesseconometrics.com/)
-[An Introduction to Statistical Learning](https://www.statlearning.com/)
+- [Mostly Harmless Econometrics](https://www.mostlyharmlesseconometrics.com/)
+- [An Introduction to Statistical Learning](https://www.statlearning.com/)
 
 ## Participation Tracker
 
