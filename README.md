@@ -75,8 +75,8 @@ will trigger a few Actions, which will in turn grade your code.
 |      Name | Score |
 |-----------|-------|
 |      Aldo |     3 |
-|   Eduardo |     4 |
-|     Savio |     2 |
-|   Elideth |     1 |
+|   Eduardo |     6 |
+|     Savio |     3 |
+|   Elideth |     3 |
 |    Alexis |     3 |
 |    Astrid |     2 |
