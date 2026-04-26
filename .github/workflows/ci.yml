@@ -1,0 +1,62 @@
+name: Autograder CI
+
+on:
+  push:
+    branches:
+      - 'did/*'
+      - 'final/*'
+
+jobs:
+  autograding-did:
+    name: Run DiD Autograder
+    if: startsWith(github.ref, 'refs/heads/did/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11.3'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r grader-requirements.txt
+
+      - name: DiD Autograder Placeholder
+        run: |
+          echo "Triggered by a push to branch: ${{ github.ref_name }}"
+          echo "This is the Diff in Diff autograder job."
+          echo "Future DiD scripts will be executed here."
+          # Example of what you might run once the grader exists:
+          # working-directory: assignments/did/code/
+          # run: python grader.py
+
+  autograding-final:
+    name: Run Final Exam Autograder
+    if: startsWith(github.ref, 'refs/heads/final/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11.3'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r grader-requirements.txt
+
+      - name: Final Exam Autograder Placeholder
+        run: |
+          echo "Triggered by a push to branch: ${{ github.ref_name }}"
+          echo "This is the Final Exam autograder job."
+          echo "Future Final Exam scripts will be executed here."
+          # Example of what you might run once the grader exists:
+          # working-directory: assignments/final/code/
+          # run: python grader.py
