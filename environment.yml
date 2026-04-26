@@ -8,5 +8,8 @@ dependencies:
   - matplotlib=3.10.0
   - numpy=2.0.2
   - pandas=2.2.2
+  - pip
   - scikit-learn=1.6.1
   - statsmodels=0.14.5
+  - pip:
+    - differences==0.3.0
