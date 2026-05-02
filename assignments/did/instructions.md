@@ -22,7 +22,7 @@ last semester!).
 command.
   - Example: `cd Documents`
 
-4. Clone the repository: `git clone <insert-repo-url-here> appec-s2-2025`
+4. Clone the repository: `git clone git@github.com:ArturoSbr/appec-s2-2025.git`
 
 5. Move into the project folder: `cd appec-s2-2025`
 
@@ -41,19 +41,19 @@ folder!).
   repository.
 
 4. Create your assignment branch using the `git checkout -b` command.
-  - The name format is strictly `assignment/did-<student-id-here>`.
+  - The name format is strictly `assignment/did-<your-student-id>`.
   - Example: `git checkout -b assignment/did-130524` (Make sure to swap `130524`
   with your actual student ID!).
 
-And done! Your workspace is ready to go. Just remember to activate your
-environment (`conda activate appec`) when writing your Difference in Differences
-assignment.
-
-> [!IMPORTANT]
-> You do **not** need to create a copy of `did.ipynb` or rename it! All you
-> need to do is open the existing `did.ipynb` file and write your answers
-> directly into it. Since you are working on your own branch, overwriting the
-> file is perfectly safe and expected.
+5. Open the notebook and start coding!
+  - Now that you're on your own branch, just open `did.ipynb` and start filling
+  in your answers directly.
+  - Remember to use the `appec` environment by selecting it from the top-right
+  corner of the notebook interface ("Select Kernel").
+  - If you haven't set up the environment yet, check the "Virtual Environment"
+  section in the [README](
+    https://github.com/ArturoSbr/appec-s2-2025#virtual-environment
+  ).
 
 ## 3. Pushing Your Code
 
@@ -63,11 +63,10 @@ the cell outputs included. Please make sure you haven't added any new cells to
 the notebook.
 
 1. Stage your notebook for commit:
-  - Run `git add <your-notebook-name.ipynb>` (make sure to only add your
-  notebook!).
+  - Run `git add did.ipynb` (make sure to only add your notebook!).
 
 2. Commit your changes with a descriptive message:
-  - Run `git commit -m "Submit DiD assignment"`
+  - Run `git commit -m "My awesome message here"`
 
 3. Push your branch to the repository:
   - Run `git push origin assignment/did-<your-student-id>`
@@ -75,5 +74,6 @@ the notebook.
 **Note:** We set up SSH access together last semester. You will need it to push
 your code! If you don't have SSH access configured anymore, please check out
 the [GitHub SSH help page](
-  https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+  https://docs.github.com/en/authentication/connecting-to-github-with-ssh/
+  generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 ) to set up SSH access again.
