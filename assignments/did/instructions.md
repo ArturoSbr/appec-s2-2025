@@ -74,5 +74,5 @@ the notebook.
 **Note:** We set up SSH access together last semester. You will need it to push
 your code! If you don't have SSH access configured anymore, please check out
 the [GitHub SSH help page](
-  https://docs.github.com/en/authentication/connecting-to-github-with-ssh/  generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+  https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 ) to set up SSH access again.
