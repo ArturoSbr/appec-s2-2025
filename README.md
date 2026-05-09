@@ -125,10 +125,10 @@ branch will trigger a few Actions, which will in turn grade your code.
 
 |      Name | Score |
 |-----------|-------|
-|      Aldo |     6 |
-|   Eduardo |    18 |
+|      Aldo |     7 |
+|   Eduardo |    20 |
 |     Savio |     9 |
 |   Elideth |    10 |
-|    Alexis |     5 |
+|    Alexis |    10 |
 |    Astrid |     9 |
-|     Karen |     3 |
+|     Karen |     5 |
