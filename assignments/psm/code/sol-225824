@@ -1,0 +1,112 @@
+import numpy as np
+import pandas as pd
+from scipy.spatial.distance import cdist
+from scipy.stats import ttest_rel
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, f1_score, roc_auc_score
+import statsmodels.api as sm
+
+URL = 'https://raw.githubusercontent.com/vincentarelbundock/Rdatasets/master/csv/MatchIt/lalonde.csv'
+df = pd.read_csv(URL).drop(columns=['rownames'])
+print('No. observations:', len(df))
+display(df.head())
+display(df.isna().sum())
+
+# Add constant
+df['const'] = 1
+
+# Encode `race`
+df = pd.concat([df, pd.get_dummies(df[['race']], dtype=int)], axis=1)
+#nos regresa un conjunto de elementos, columnas, que si regresa un DF
+#se hace el join de esta nueva creacion
+#
+
+# Covariates we will use to predict probability of being treated
+#es una lista
+psm_cols_X = [
+    'const', 'age', 'educ', 'married', 'nodegree', 're74', 're75', 'race_black',
+    'race_hispan'
+]
+
+# Covariates used to estimate ATE
+cols_X = ['treat'] + psm_cols_X
+
+# Init and fit model
+psm = LogisticRegression(penalty=None, max_iter=100000, random_state=42)
+psm.fit(X=df[psm_cols_X], y=df['treat'])
+
+# Make predictions
+psm_pred = psm.predict(df[psm_cols_X])
+psm_prob = psm.predict_proba(df[psm_cols_X])[:, 1]
+
+# Assign predicted probability column
+df['p_hat'] = psm_prob
+
+# 1. Create a distance matrix (Rows: Controls, Columns: Treated)
+# This calculates the squared difference between every treated unit's
+# propensity score and every control unit's propensity score.
+y0 = df.loc[df['treat'].eq(0), ['p_hat']].values  # Probas of control units
+y1 = df.loc[df['treat'].eq(1), ['p_hat']].values  # Probas of treatment units
+dist = cdist(y0, y1, metric='euclidean')
+
+# 2. Define the Caliper (Maximum allowable distance)
+# If the closest neighbor is further away than this value, we consider
+# it a bad match and leave the treated unit unmatched.
+THR = 0.05
+
+y1.shape
+
+#np.argmin(dist[:,2])
+#dist[np.argmin(dist[:,2]),:]
+dist.shape
+
+dist1 = dist.copy()
+# 3. Iterate through each treated unit (each column in our matrix)
+for i in range(dist.shape[1]):
+
+    # Extract the column of distances for the i-th treated unit
+    # This vector contains its distance to every control unit
+    a = dist1[:, i]  # All rows (:), i-th column
+
+    # Find the index of the smallest distance (the 'Nearest Neighbor')
+    idx = np.argmin(a) #Dame la posicion del mas chiquito
+    val = a[idx]  # Fetch distance between the two , ahora dame el valor de esa posicion
+
+    # 4. Apply the Caliper constraint
+    if val <= THR:
+
+        # Identify the original DataFrame index for the treated unit
+        idx_1 = df[df['treat'].eq(1)].iloc[i].name.item()
+
+        # Identify the original DataFrame index for the chosen control unit
+        idx_0 = df[df['treat'].eq(0)].iloc[idx].name.item()
+
+        #matches[idx_1] = idx_0
+
+        # Store the match: link the treated ID to the control ID
+        df.loc[idx_1, 'match'] = idx_0
+
+        #a ver, aqui cambiare por otro metodo
+        dist1[idx , :] = np.inf #lo que hace es sustituir esa matriz por infinito por lo que ya no será seleccionado
+
+#Declare matched table
+df_balanced = pd.concat(
+    [
+        df.loc[df['match'].notna()],
+        df.loc[df.loc[df['match'].notna(), 'match']]
+    ],
+    axis=0,
+    ignore_index=True
+)
+
+df_balanced.head()
+
+prueba1 = df_balanced.match
+
+prueba2 = df_balanced.match
+
+prueba1.values == prueba2.values
+
+print(len(prueba1.unique()), "," ,len(prueba2.unique()))
+
+prueba2
