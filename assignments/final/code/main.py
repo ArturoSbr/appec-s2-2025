@@ -36,9 +36,9 @@ ks = pd.get_dummies(
 
 # 1.4 Do a Left Join between `es` and `ks`
 es = pd.merge(
-    left=None,
-    right=None,
-    how=None,
+    left=None,  # Use `es` as Left
+    right=None,  # User `ks` as Right
+    how=None,  # Use a Left Join
     left_index=True,
     right_index=True
 )
@@ -47,14 +47,14 @@ es = pd.merge(
 exog = [col for col in es.columns if col.startswith('k_') and col != 'k_-1']
 
 # 1.5 Replace NaN from the Left Join values with 0
-es[exog] = None
+es[exog] = None  # Use .fillna() method
 
 # 1.6 Declare model
 m1 = PanelOLS(
     dependent=None,  # Set dependent variable here
     exog=None,  # Set controls here
-    entity_effects=None,
-    time_effects=None,
+    entity_effects=None,  # Use entity effects
+    time_effects=None,  # Use time effects
     drop_absorbed=True,
     check_rank=True,
 )
@@ -64,6 +64,9 @@ r1 = m1.fit(cov_type='clustered')
 
 # Store parameters in `q1_params`
 q1_res = r1.params.tolist()
+
+# Display results
+print(q1_res)
 
 
 # ----------------------- 2. Callaway-Sant'Anna At Home ------------------------
@@ -101,35 +104,26 @@ for g in sorted(G):
         )
 
         # Calculate number of observations
-        n_control = mask_control.sum()
-        n_treatment = mask_treatment.sum()
+        n0 = mask_control.sum()
+        n1 = mask_treatment.sum()
 
         # 2.3 Calculate observed difference in means
-        diff = (
-            None  # Avg. log_emp of treatment
-            - None  # Avg. log_emp of control
-        )
-
-        # Calculate t-test
-        ttest = ttest_ind(
-            a=None,  # Treatment group
-            b=None,  # Control group
-            equal_var=False
-        )
+        # Use mask_control to calculate average log_emp of control group
+        y0 = None
+        # Use mask_treatment to calculate average log_emp of treatment group
+        y1 = None
 
         # Append everything
-        data.append([
-            g, t, diff, ttest.statistic, ttest.pvalue, n_control, n_treatment
-        ])
+        data.append([g, t, n0, n1, y0, y1])
 
-# Create dataframe using our calculation
+# Create dataframe using our calculations
 q2_res = pd.DataFrame(
     data=data,
     columns=[
-        'first_treat', 'year', 'effect', 't-stat', 'p-value', 'n_control',
-        'n_treatment'
+        'cohort', 'year', 'n_control', 'n_treatment', 'y_control', 'y_treatment'
     ]
 ).sort_values(['first_treat', 'year']).reset_index()
+q2_res['relative_time'] = q2_res['year'] - q2_res['cohort']
 
 # Display results
 print(q2_res)
@@ -143,19 +137,19 @@ cs = df.copy()
 cs.set_index([None, None], inplace=True)
 
 # 3.2 Make never-treated units have np.nan instead of 0 in `first_treat` column
-cs['first_treat'] = None
+cs['first_treat'] = None  # Use .replace() method
 
 # 3.3 Declare CS model
 m2 = differences.ATTgt(
     data=None,  # Pass indexed dataset
     cohort_column=None,  # Pass name of column that represents cohorts
-    dosage_column=None,
-    base_period='varying',
-    anticipation=0
+    dosage_column=None,  # Don't do anything here
+    base_period='varying',  # Don't do anything here
+    anticipation=0  # Don't do anything here
 )
 
 # Fit model
-r2 = m2.fit(None)  # Pass name of dependent variable
+r2 = m2.fit(None)  # Pass name of dependent variable here
 
 # Aggregate fitted model at the event level
 q3_res = r2.aggregate(type_of_aggregation='event')
