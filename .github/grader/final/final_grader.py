@@ -1,5 +1,5 @@
 import os
-import runpy
+
 import sys
 import json
 import traceback
@@ -22,7 +22,9 @@ def main():
     student_globals = {}
     try:
         print("Executing student code...")
-        student_globals = runpy.run_path(main_script_path)
+        with open(main_script_path, "r", encoding="utf-8") as f:
+            student_code = f.read()
+        exec(student_code, student_globals)
         print("Execution completed successfully.")
     except Exception as e:
         print(f"\nExecution encountered an error: {e}")
