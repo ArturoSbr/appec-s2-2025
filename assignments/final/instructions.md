@@ -115,15 +115,23 @@ $t \in T$.
 2. Declare `mask_treatment` as rows where:
     * $year = t$ (time condition)
     * Cohort is $g$ (condition 3)
-3. Apply `mask_control` and `mask_treatment` to `df` to calculate the observed
-   difference in `log_emp` between both groups.
-4. Use `mask_control` and `mask_treatment` on `df` to calculate a $t$-test
-   between both groups.
+3. Get the number of observations used as controls.
+4. Get the number of treated units.
+5. Apply `mask_control` to `df` to calculate the average of `log_emp` for the
+control group.
+6. Apply `mask_treatment` to `df` to calculate the average of `log_emp` for the
+treatment group.
+
+The rest of the code will automatically calculate the first-differences for the
+control and treatment groups $(\bar{Y}_t - \bar{Y}_{t-1})$ and then the
+difference of these differences (i.e., the difference in differences). These
+DiD estimates represent the ATT for cohort $g$ at time $t$. This is the reason
+the authors call it $ATT(g, t)$ in their paper. These estimates are stored in
+column `delta` and will be printed by the autograder automatically.
 
 In the original paper, the authors calculate $ATT(g, t)$ using a doubly robust
 estimator. In this homemade recreation of the CS estimator, we manually built
-all 15 different combinations of $t$ and $g$ and used a $t$-test to check if the
-average employment is different between the treatment and control groups.
+all 15 different combinations of $t$ and $g$ using observed means.
 
 The takeaway here is how the groups are built. Namely, we built a valid
 control group for each pair $(g, t)$ using never-treated units as well as
