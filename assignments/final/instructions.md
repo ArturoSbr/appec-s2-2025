@@ -125,6 +125,20 @@ Your results will be automatically stored in `q2_res`.
 
 #### 3. Official CS Library
 
+Let's do the same thing (but with the actual doubly robust estimator we
+mentioned in the previous question) using a peer-reviewed version of the CS
+estimator.
+
+1. Set the county identifier column and `year` as indexes.
+2. Replace zeros with `np.nan` in the `first_treat` column.
+3. Declare model `m2` using `ATTgt`.
+    * Pass the indexed dataset as argument `data`.
+    * Pass the name of the cohort column as `cohort_column`.
+4. Fit `m2` with the `.fit` method by passing the name of the dependent
+   variable.
+
+Your results will be stored in `q3_res`.
+
 ### Submitting your code
 
 Follow these steps once you think your code is good to go.
