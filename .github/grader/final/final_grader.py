@@ -1,4 +1,5 @@
 import os
+import subprocess
 
 import sys
 import json
@@ -32,16 +33,34 @@ def main():
         print("\nContinuing grading with available variables...")
 
     total_score = 0
-    max_score = 3
+    max_score = 4
     
+    # ---------------- Code Quality ----------------
+    print("\n" + " Grading Code Quality ".center(80, "-"))
+    try:
+        result = subprocess.run(
+            ['flake8', main_script_path, '--max-line-length=80'],
+            capture_output=True,
+            text=True
+        )
+        if result.returncode == 0:
+            print("Code Quality: CORRECT (+1 point)")
+            total_score += 1
+        else:
+            print(f"Code Quality: FAILED. Linting errors found:\n{result.stdout}")
+    except Exception as e:
+        print(f"Code Quality: FAILED. Error running flake8: {e}")
+
     # ---------------- Question 1 ----------------
-    print("\n--- Grading Question 1 ---")
+    print("\n" + " Grading Question 1 ".center(80, "-"))
     if 'q1_res' in student_globals:
         try:
             q1_expected_path = os.path.join(expected_dir, 'q1_exp.csv')
             q1_expected = pd.read_csv(q1_expected_path)
             
             q1_student = student_globals['q1_res']
+            print("Student output (first 20 rows):")
+            print(q1_student.head(20))
             pd.testing.assert_frame_equal(
                 q1_student.reset_index(drop=True),
                 q1_expected.reset_index(drop=True),
@@ -57,12 +76,15 @@ def main():
         print("Question 1: FAILED. 'q1_res' was not found. The script might have crashed before defining it.")
 
     # ---------------- Question 2 ----------------
-    print("\n--- Grading Question 2 ---")
+    print("\n" + " Grading Question 2 ".center(80, "-"))
     if 'q2_res' in student_globals:
         try:
             q2_expected_path = os.path.join(expected_dir, 'q2_exp.csv')
             q2_expected = pd.read_csv(q2_expected_path)
             q2_student = student_globals['q2_res']
+            
+            print("Student output (first 20 rows):")
+            print(q2_student.head(20))
             
             # Allow some tolerance for floating point comparisons
             pd.testing.assert_frame_equal(
@@ -80,12 +102,15 @@ def main():
         print("Question 2: FAILED. 'q2_res' was not found. The script might have crashed before defining it.")
 
     # ---------------- Question 3 ----------------
-    print("\n--- Grading Question 3 ---")
+    print("\n" + " Grading Question 3 ".center(80, "-"))
     if 'q3_res' in student_globals:
         try:
             q3_expected_path = os.path.join(expected_dir, 'q3_exp.csv')
             q3_expected = pd.read_csv(q3_expected_path)
             q3_student = student_globals['q3_res']
+            
+            print("Student output (first 20 rows):")
+            print(q3_student.head(20))
             
             pd.testing.assert_frame_equal(
                 q3_student.reset_index(drop=True),
