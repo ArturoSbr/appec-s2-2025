@@ -9,7 +9,6 @@ import differences
 from linearmodels.panel import PanelOLS
 import numpy as np
 import pandas as pd
-from scipy.stats import ttest_ind
 
 # Read dataset
 PATH = os.path.join('..', 'data', 'wages.csv')
