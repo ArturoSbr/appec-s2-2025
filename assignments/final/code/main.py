@@ -102,14 +102,16 @@ for g in sorted(G):
             & None  # 3. Treatment cohort
         )
 
-        # Calculate number of observations
-        n0 = mask_control.sum()
-        n1 = mask_treatment.sum()
+        # 2.3 Calculate number of observations used as control
+        n0 = None  # Sum mask_control
 
-        # 2.3 Calculate observed difference in means
-        # Use mask_control to calculate average log_emp of control group
+        # 2.4 Calculate number of treated units
+        n1 = None  # Sum mask_treatment
+
+        # 2.5 Use mask_control to calculate average log_emp of control group
         y0 = None
-        # Use mask_treatment to calculate average log_emp of treatment group
+
+        # 2.6 Use mask_treatment to calculate average log_emp of treatment group
         y1 = None
 
         # Append everything
@@ -121,11 +123,19 @@ q2_res = pd.DataFrame(
     columns=[
         'cohort', 'year', 'n_control', 'n_treatment', 'y_control', 'y_treatment'
     ]
-).sort_values(['first_treat', 'year']).reset_index()
-q2_res['relative_time'] = q2_res['year'] - q2_res['cohort']
+).sort_values(['cohort', 'year']).reset_index(drop=True)
+
+# Declare first-differences column for each cohort
+q2_res[['d1_control', 'd1_treatment']] = (
+    q2_res.groupby('cohort')[['y_control', 'y_treatment']].diff(periods=1)
+)
+
+# Declare Diff-in-Diffs column (delta)
+q2_res['delta'] = q2_res['d1_treatment'] - q2_res['d1_control']
 
 # Display results
 print(q2_res)
+
 
 # ------------------ 3. Official Callaway Sant'Anna Estimator ------------------
 
