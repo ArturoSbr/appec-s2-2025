@@ -102,9 +102,9 @@ def main():
         print("Question 3: FAILED. 'q3_res' was not found. The script might have crashed before defining it.")
 
     # Final Score
-    print(f"\n==========================================")
-    print(f"FINAL SCORE: {total_score} / {max_score}")
-    print(f"==========================================")
+    print("\n" + "=" * 80)
+    print(f"FINAL SCORE: {total_score} / {max_score}".center(80, " "))
+    print("=" * 80)
 
     if total_score < max_score:
         sys.exit(1)
