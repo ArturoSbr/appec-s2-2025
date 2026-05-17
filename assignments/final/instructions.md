@@ -185,6 +185,9 @@ area by running: `git add assignments/final/code/main.py`.
    * **Subsequent pushes (after fixing a mistake):** `git push`
 5. Check your results in the repository's [Actions tab](
    https://github.com/ArturoSbr/appec-s2-2025/actions
-) by clicking on your latest commit message. If you do not get full
+) by clicking on your latest commit message, then on "Run Final Exam
+Autograder", and then on the dropdown menu "Final Exam Autograder". This will
+display the output that the autograder produced when running your code. At the
+bottom of those results, you will see your final score. If you do not get full
 points, read the error logs in your workflow run to see what failed,
 modify your code locally, and repeat steps 2 through 5 to try again!
