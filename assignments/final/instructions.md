@@ -23,7 +23,17 @@ isolate average treatment effects.
 
 The data is available in file `assignments/final/data/wages.csv`. It
 contains a balanced panel tracking county-level teen employment and we
-will use it to estimate the causal effect of increasing the minimum wage.
+will use it to estimate the causal effect of increasing the minimum wage. It
+contains the following columns:
+
+* `year`: The calendar year of the observation.
+* `county`: A unique numerical identifier for each county.
+* `log_pop`: The natural logarithm of the county's population.
+* `log_emp`: The natural logarithm of teen employment in the county.
+* `first_treat`: The year the county first implemented the minimum wage
+increase (treatment cohort).
+* **`treat`**: A binary indicator (0 or 1) marking whether the county ever
+receives treatment.
 
 ## Step-by-Step Instructions
 
@@ -42,11 +52,14 @@ will use it to estimate the causal effect of increasing the minimum wage.
 4. Switch to the `main` branch with `git checkout main`.
 5. Update the branch with `git pull origin main`.
 6. Create **your own branch** with `git checkout -b final/<your ID here>`.
-   For example: `git checkout -b final/130524`.
+For example: `git checkout -b final/130524`.
 7. Open file `assignments/final/code/main.py` and edit it by answering the
-   questions described in the following section.
+questions described in the following section.
 
 ### Questions
+
+Your job is to fill in the code in `assignments/final/code/main.py`. Use this
+guide to complete the code there.
 
 #### 1. Event Study
 
