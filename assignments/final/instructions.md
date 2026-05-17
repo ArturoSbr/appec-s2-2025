@@ -154,7 +154,8 @@ Your results will be stored in `q3_res`.
 
 ### Submitting your code
 
-Follow these steps once you think your code is good to go.
+Follow these steps once you think your version of
+`assignments/final/code/main.py` is good to go.
 
 1. Verify that you are on **your own branch** by running `git branch`.
 This command lists all local branches; your branch name,
@@ -176,6 +177,6 @@ area by running: `git add assignments/final/code/main.py`.
    * **Subsequent pushes (after fixing a mistake):** `git push`
 5. Check your results in the repository's [Actions tab](
    https://github.com/ArturoSbr/appec-s2-2025/actions
-   ) by clicking on your latest commit message. If you do not get full
-   points, read the error logs in your workflow run to see what failed,
-   modify your code locally, and repeat steps 2 through 5 to try again!
+) by clicking on your latest commit message. If you do not get full
+points, read the error logs in your workflow run to see what failed,
+modify your code locally, and repeat steps 2 through 5 to try again!
