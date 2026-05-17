@@ -1,0 +1,113 @@
+import os
+import runpy
+import sys
+import json
+import traceback
+import numpy as np
+import pandas as pd
+
+def main():
+    print("--- Running Autograder for Final Exam ---")
+    
+    # Path setup: Grader is in .github/grader/final/final_grader.py
+    # Repo root is 3 directories up
+    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+    main_script_path = os.path.join(base_dir, 'assignments', 'final', 'code', 'main.py')
+    expected_dir = os.path.dirname(__file__)
+    
+    # Change working directory so main.py runs properly (it reads data from '../data/wages.csv')
+    os.chdir(os.path.dirname(main_script_path))
+    
+    # Execute student code
+    student_globals = {}
+    try:
+        print("Executing student code...")
+        student_globals = runpy.run_path(main_script_path)
+        print("Execution completed successfully.")
+    except Exception as e:
+        print(f"\nExecution encountered an error: {e}")
+        traceback.print_exc(limit=2)
+        print("\nContinuing grading with available variables...")
+
+    total_score = 0
+    max_score = 3
+    
+    # ---------------- Question 1 ----------------
+    print("\n--- Grading Question 1 ---")
+    if 'q1_res' in student_globals:
+        try:
+            q1_expected_path = os.path.join(expected_dir, 'q1_exp.csv')
+            q1_expected = pd.read_csv(q1_expected_path)
+            
+            q1_student = student_globals['q1_res']
+            pd.testing.assert_frame_equal(
+                q1_student.reset_index(drop=True),
+                q1_expected.reset_index(drop=True),
+                check_dtype=False,
+                atol=1e-3,
+                rtol=1e-3
+            )
+            print("Question 1: CORRECT (+1 point)")
+            total_score += 1
+        except Exception as e:
+            print(f"Question 1: FAILED. Output did not match expected or error during comparison: {e}")
+    else:
+        print("Question 1: FAILED. 'q1_res' was not found. The script might have crashed before defining it.")
+
+    # ---------------- Question 2 ----------------
+    print("\n--- Grading Question 2 ---")
+    if 'q2_res' in student_globals:
+        try:
+            q2_expected_path = os.path.join(expected_dir, 'q2_exp.csv')
+            q2_expected = pd.read_csv(q2_expected_path)
+            q2_student = student_globals['q2_res']
+            
+            # Allow some tolerance for floating point comparisons
+            pd.testing.assert_frame_equal(
+                q2_student.reset_index(drop=True),
+                q2_expected.reset_index(drop=True),
+                check_dtype=False,
+                atol=1e-3,
+                rtol=1e-3
+            )
+            print("Question 2: CORRECT (+1 point)")
+            total_score += 1
+        except Exception as e:
+            print(f"Question 2: FAILED. Output did not match expected or error during comparison: {e}")
+    else:
+        print("Question 2: FAILED. 'q2_res' was not found. The script might have crashed before defining it.")
+
+    # ---------------- Question 3 ----------------
+    print("\n--- Grading Question 3 ---")
+    if 'q3_res' in student_globals:
+        try:
+            q3_expected_path = os.path.join(expected_dir, 'q3_exp.csv')
+            q3_expected = pd.read_csv(q3_expected_path)
+            q3_student = student_globals['q3_res']
+            
+            pd.testing.assert_frame_equal(
+                q3_student.reset_index(drop=True),
+                q3_expected.reset_index(drop=True),
+                check_dtype=False,
+                atol=1e-3,
+                rtol=1e-3
+            )
+            print("Question 3: CORRECT (+1 point)")
+            total_score += 1
+        except Exception as e:
+            print(f"Question 3: FAILED. Output did not match expected or error during comparison: {e}")
+    else:
+        print("Question 3: FAILED. 'q3_res' was not found. The script might have crashed before defining it.")
+
+    # Final Score
+    print(f"\n==========================================")
+    print(f"FINAL SCORE: {total_score} / {max_score}")
+    print(f"==========================================")
+
+    if total_score < max_score:
+        sys.exit(1)
+    else:
+        sys.exit(0)
+
+if __name__ == "__main__":
+    main()
