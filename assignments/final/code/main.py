@@ -61,11 +61,8 @@ m1 = PanelOLS(
 # Fit model
 r1 = m1.fit(cov_type='clustered')
 
-# Store parameters in `q1_params`
-q1_res = r1.params.tolist()
-
-# Display results
-print(q1_res)
+# Store results in a dataframe
+q1_res = pd.concat([r1.params, r1.pvalues], axis=1).reset_index(names=['k'])
 
 
 # ----------------------- 2. Callaway-Sant'Anna At Home ------------------------
@@ -133,9 +130,6 @@ q2_res[['d1_control', 'd1_treatment']] = (
 # Declare Diff-in-Diffs column (delta)
 q2_res['delta'] = q2_res['d1_treatment'] - q2_res['d1_control']
 
-# Display results
-print(q2_res)
-
 
 # ------------------ 3. Official Callaway Sant'Anna Estimator ------------------
 
@@ -162,6 +156,10 @@ r2 = m2.fit(None)  # Pass name of dependent variable here
 
 # Aggregate fitted model at the event level
 q3_res = r2.aggregate(type_of_aggregation='event')
-
-# Display results
-print(q3_res)
+q3_res = pd.concat(
+    [
+        q3_res['EventAggregation']['']['ATT'],
+        q3_res['EventAggregation']['analytic']['std_error']
+    ],
+    axis=1
+).reset_index()
