@@ -27,27 +27,31 @@ es.loc[es['first_treat'] == 0, 'k'] = np.nan
 # 1.2 Set unit and time columns as indexes
 es.set_index(['county', 'year'], inplace=True)
 
-# 1.3 Turn column `k` into dummies (only for treated units)
+# 1.3 Turn column `k` into integer dummies (only for treated units)
+# Convert k to int for treated observations so dummy names are like 'k_-4' (no .0)
 ks = pd.get_dummies(
-    data=es.loc[es['treat'] == 1, ['k']],  # Filter out never-treated units
+    data=es.loc[es['treat'] == 1, ['k']].assign(k=lambda d: d['k'].astype(int)),
     columns=['k'],
     dtype=int
 )
 
 # 1.4 Do a Left Join between `es` and `ks`
 es = pd.merge(
-    left=es,  # Use `es` as Left
-    right=ks,  # User `ks` as Right
-    how='left',  # Use a Left Join
+    left=es,
+    right=ks,
+    how='left',
     left_index=True,
     right_index=True
 )
 
+# 1.5 Replace NaN from the Left Join values with 0
+# Build exog list after filling NaNs so we can sort by numeric period
+es.fillna({col: 0 for col in es.columns if str(col).startswith('k_')}, inplace=True)
+
 # Store names of exogenous variables in list (also set k=-1 as reference)
 exog = [col for col in es.columns if col.startswith('k_') and col != 'k_-1']
-
-# 1.5 Replace NaN from the Left Join values with 0
-es[exog] = es[exog].fillna(0)  # Use .fillna() method
+# Sort exog by the numeric value after 'k_'
+exog = sorted(exog, key=lambda x: int(x.split('_', 1)[1]))
 
 # 1.6 Declare model
 m1 = PanelOLS(
