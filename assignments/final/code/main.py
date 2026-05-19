@@ -139,7 +139,7 @@ cs = df.copy()
 cs.set_index(['county', 'year'], inplace=True)
 
 # 3.2 Make never-treated units have np.nan instead of 0 in `first_treat` column
-cs['first_treat'] = cs['first_treat'].replace(0, np.nan).astype(float)  # Use .replace() method
+cs['first_treat'] = cs['first_treat'].replace(0, np.nan).astype(float)
 
 # 3.3 Declare CS model
 m2 = differences.ATTgt(
