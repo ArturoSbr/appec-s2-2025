@@ -1,4 +1,4 @@
-"""Final Econometrics II Assignment
+""""Final Econometrics II Assignment
 
 This file contains the final Econometrics II assignment. Refer to file
 /assignments/final/instructions.md for instructions."""
@@ -20,24 +20,24 @@ df = pd.read_csv(PATH)
 # Make a copy of `df`
 es = df.copy()
 
-# 1.1 Define event-time column ($year - \tau_i$)
-es['k'] = None
+# 1.1 Define event-time column (year - tau_i)
+es['k'] = es['year'] - es['first_treat']
 
 # 1.2 Set unit and time columns as indexes
-es.set_index([None, None], inplace=True)
+es.set_index(['county', 'year'], inplace=True)
 
 # 1.3 Turn column `k` into dummies (only for treated units)
 ks = pd.get_dummies(
-    data=es.loc[None, ['k']],  # Filter out never-treated units
+    data=es.loc[es['treat'] == 1, ['k']],
     columns=['k'],
     dtype=int
 )
 
 # 1.4 Do a Left Join between `es` and `ks`
 es = pd.merge(
-    left=None,  # Use `es` as Left
-    right=None,  # User `ks` as Right
-    how=None,  # Use a Left Join
+    left=es,
+    right=ks,
+    how='left',
     left_index=True,
     right_index=True
 )
@@ -46,14 +46,14 @@ es = pd.merge(
 exog = [col for col in es.columns if col.startswith('k_') and col != 'k_-1']
 
 # 1.5 Replace NaN from the Left Join values with 0
-es[exog] = None  # Use .fillna() method
+es[exog] = es[exog].fillna(0)
 
 # 1.6 Declare model
 m1 = PanelOLS(
-    dependent=None,  # Set dependent variable here
-    exog=None,  # Set controls here
-    entity_effects=None,  # Use entity effects
-    time_effects=None,  # Use time effects
+    dependent=es['log_emp'],
+    exog=es[exog],
+    entity_effects=True,
+    time_effects=True,
     drop_absorbed=True,
     check_rank=True,
 )
@@ -80,36 +80,33 @@ for g in sorted(G):
 
         # 2.1 Declare mask to select control units (conditions 1 and 2)
         mask_control = (
-            None  # Year equals t
+            (df['year'] == t)
             & (
-                # Condition 1: Never-treated units
-                None  # treat column
-                # Condition 2: Not-yet treated units
+                (df['treat'] == 0)
                 | (
-                    None  # Not-yet treated
-                    & None  # Not cohort g
+                    (df['first_treat'] > t)
+                    & (df['first_treat'] != g)
                 )
             )
         )
 
         # 2.2 Declare mask to select treatment cohort (condition 3)
         mask_treatment = (
-            None  # Year equals t
-            # Condition 3: Treatment cohort
-            & None  # 3. Treatment cohort
+            (df['year'] == t)
+            & (df['first_treat'] == g)
         )
 
         # 2.3 Calculate number of observations used as control
-        n0 = None  # Sum mask_control
+        n0 = mask_control.sum()
 
         # 2.4 Calculate number of treated units
-        n1 = None  # Sum mask_treatment
+        n1 = mask_treatment.sum()
 
         # 2.5 Use mask_control to calculate average log_emp of control group
-        y0 = None
+        y0 = df.loc[mask_control, 'log_emp'].mean()
 
         # 2.6 Use mask_treatment to calculate average log_emp of treatment group
-        y1 = None
+        y1 = df.loc[mask_treatment, 'log_emp'].mean()
 
         # Append everything
         data.append([g, t, n0, n1, y0, y1])
@@ -137,22 +134,22 @@ q2_res['delta'] = q2_res['d1_treatment'] - q2_res['d1_control']
 cs = df.copy()
 
 # 3.1 Set units (county) and time (year) columns as indexes
-cs.set_index([None, None], inplace=True)
+cs.set_index(['county', 'year'], inplace=True)
 
 # 3.2 Make never-treated units have np.nan instead of 0 in `first_treat` column
-cs['first_treat'] = None  # Use .replace() method
+cs['first_treat'] = cs['first_treat'].replace(0, np.nan)
 
 # 3.3 Declare CS model
 m2 = differences.ATTgt(
-    data=None,  # Pass indexed dataset
-    cohort_column=None,  # Pass name of column that represents cohorts
-    dosage_column=None,  # Don't do anything here
-    base_period='varying',  # Don't do anything here
-    anticipation=0  # Don't do anything here
+    data=cs,
+    cohort_column='first_treat',
+    dosage_column=None,
+    base_period='varying',
+    anticipation=0
 )
 
 # Fit model
-r2 = m2.fit(None)  # Pass name of dependent variable here
+r2 = m2.fit('log_emp')
 
 # Aggregate fitted model at the event level
 q3_res = r2.aggregate(type_of_aggregation='event')
