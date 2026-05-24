@@ -86,7 +86,7 @@ for g in sorted(G):
             df['year'] == t  # Year equals t
             & (
                 # Condition 1: Never-treated units
-                df['first_treat'].isna()  # treat column
+                (df['first_treat'] == 0)  # treat column
                 # Condition 2: Not-yet treated units
                 | (
                     (df['first_treat'] > t)  # Not-yet treated
@@ -99,7 +99,7 @@ for g in sorted(G):
         mask_treatment = (
             (df['year'] == t)  # Year equals t
             # Condition 3: Treatment cohort
-            & (df['treat'] == g)  # 3. Treatment cohort
+            & (df['first_treat'] == g)  # 3. Treatment cohort
         )
 
         # 2.3 Calculate number of observations used as control
