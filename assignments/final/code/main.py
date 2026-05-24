@@ -83,7 +83,7 @@ for g in sorted(G):
 
         # 2.1 Declare mask to select control units (conditions 1 and 2)
         mask_control = (
-            df['year'] == t  # Year equals t
+            (df['year'] == t)  # Year equals t
             & (
                 # Condition 1: Never-treated units
                 (df['first_treat'] == 0)  # treat column
