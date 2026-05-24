@@ -86,7 +86,7 @@ for g in sorted(G):
             df['year'] == t  # Year equals t
             & (
                 # Condition 1: Never-treated units
-                df['treat'] == 0  # treat column
+                df['first_treat'].isna()  # treat column
                 # Condition 2: Not-yet treated units
                 | (
                     (df['first_treat'] > t)  # Not-yet treated
@@ -146,7 +146,9 @@ cs = df.copy()
 cs.set_index(['county', 'year'], inplace=True)
 
 # 3.2 Make never-treated units have np.nan instead of 0 in `first_treat` column
-cs['first_treat'] = cs['first_treat'].replace(0, np.nan)  # Use .replace() method
+cs['first_treat'] = cs['first_treat'].replace(
+    0, np.nan
+)  # Use .replace() method
 
 # 3.3 Declare CS model
 m2 = differences.ATTgt(
