@@ -18,7 +18,7 @@ PATH = os.path.join('..', 'data', 'wages.csv')
 df = pd.read_csv(PATH)
 
 # Strip whitespace from column names (defensive fix)
-df.columns = df.columns.str()
+df.columns = df.columns()
 
 
 # ------------------------------- 1. Event Study -------------------------------
