@@ -3,8 +3,8 @@
 This file contains the final Econometrics II assignment. Refer to file
 /assignments/final/instructions.md for instructions."""
 
-!pip install differences
-!pip install linearmodels
+#!pip install differences
+#!pip install linearmodels
 import os
 
 import differences
@@ -18,7 +18,7 @@ PATH = os.path.join('..', 'data', 'wages.csv')
 df = pd.read_csv(PATH)
 
 # Strip whitespace from column names (defensive fix)
-df.columns = df.columns.str.strip()
+df.columns = df.columns.str()
 
 
 # ------------------------------- 1. Event Study -------------------------------
