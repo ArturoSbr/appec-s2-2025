@@ -14,7 +14,7 @@ import pandas as pd
 
 
 # Read dataset
-PATH = './assignments/final/data/wages.csv'
+PATH = os.path.join('..', 'data', 'wages.csv')
 df = pd.read_csv(PATH)
 
 # Strip whitespace from column names (defensive fix)
