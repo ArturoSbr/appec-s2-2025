@@ -3,8 +3,8 @@
 This file contains the final Econometrics II assignment. Refer to file
 /assignments/final/instructions.md for instructions."""
 
-#!pip install differences
-#!pip install linearmodels
+# !pip install differences
+# !pip install linearmodels
 import os
 
 import differences
