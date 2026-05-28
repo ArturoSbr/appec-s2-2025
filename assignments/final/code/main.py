@@ -39,7 +39,8 @@ es = pd.merge(
     right=ks,
     how='left',
     left_index=True,
-    right_index=True)
+    right_index=True
+)
 
 # Store names of exogenous variables in list (also set k=-1 as reference)
 exog = [col for col in es.columns if col.startswith('k_') and col != 'k_-1']
@@ -63,6 +64,7 @@ r1 = m1.fit(cov_type='clustered')
 # Store results in a dataframe
 q1_res = pd.concat([r1.params, r1.pvalues], axis=1).reset_index(names=['k'])
 
+
 # ----------------------- 2. Callaway-Sant'Anna At Home ------------------------
 
 # Get all years and treatment cohorts in the dataset
@@ -79,7 +81,7 @@ for g in sorted(G):
         # 2.1 Declare mask to select control units (conditions 1 and 2)
         mask_control = (
             df['year'].eq(t)
-             & (
+            & (
                 df['treat'].eq(0)
                 | (
                     df['first_treat'].gt(t)
@@ -95,10 +97,10 @@ for g in sorted(G):
         )
 
         # 2.3 Calculate number of observations used as control
-        n0 = mask_control.sum()  # Sum mask_control
+        n0 = mask_control.sum()
 
         # 2.4 Calculate number of treated units
-        n1 = mask_treatment.sum()  # Sum mask_treatment
+        n1 = mask_treatment.sum()
 
         # 2.5 Use mask_control to calculate average log_emp of control group
         y0 = df.loc[mask_control, 'log_emp'].mean()
@@ -135,7 +137,7 @@ cs = df.copy()
 cs.set_index(['county', 'year'], inplace=True)
 
 # 3.2 Make never-treated units have np.nan instead of 0 in `first_treat` column
-cs['first_treat'] = cs['first_treat'].replace(0, np.nan) # Use .replace() method
+cs['first_treat'] = cs['first_treat'].replace(0, np.nan)
 
 # 3.3 Declare CS model
 m2 = differences.ATTgt(
@@ -147,7 +149,7 @@ m2 = differences.ATTgt(
 )
 
 # Fit model
-r2 = m2.fit('log_emp')  # Pass name of dependent variable here
+r2 = m2.fit('log_emp')
 
 # Aggregate fitted model at the event level
 q3_res = r2.aggregate(type_of_aggregation='event')
