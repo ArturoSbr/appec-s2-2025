@@ -12,13 +12,9 @@ from linearmodels.panel import PanelOLS
 import numpy as np
 import pandas as pd
 
-
 # Read dataset
 PATH = os.path.join('..', 'data', 'wages.csv')
 df = pd.read_csv(PATH)
-
-# Strip whitespace from column names (defensive fix)
-df.columns = df.columns()
 
 
 # ------------------------------- 1. Event Study -------------------------------
